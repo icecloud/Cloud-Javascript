@@ -19,9 +19,13 @@ Cloud.slideBanner = function ($this) {
 	$li.each(function(index) {
 	    $trigger = $('<li>' + (index+1) + '</li>').data('index', index);
 	    $triggers.prepend($trigger);
-	    $trigger.hover(function() {
+            
+            function transit() {
                 transitTo($(this).data('index'));
- 	    });
+            };
+
+	    $trigger.hover(transit)
+                .click(transit);
 	});
 
 	$triggers.find('li').last().addClass('active');
