@@ -39,11 +39,15 @@ Cloud.slideBanner = function ($this) {
                     $imgList.css('top', -height*index);
                 }).fadeIn(speed/2);
 
-            // Update acti        };
+            // Update active trigger
+            currentIndex = index;
+	    $triggers.find('li.active').removeClass('active');
+	    $triggers.find('li:eq(' + (num - index - 1) + ')').addClass('active');
+	};
     };
 
     function transitToNext() {
-        transitTo((currentIndex+1) % num);
+	transitTo((currentIndex+1) % num);
     };
 
     function autoStart(interval) {
@@ -51,7 +55,7 @@ Cloud.slideBanner = function ($this) {
             stop(); // restart
         };
         if (interval > 0) {
-            autoStartHandle = setInterval(transitToNext, interval);
+	    autoStartHandle = setInterval(transitToNext, interval);
             autoModeInterval = interval;
         };
     };
@@ -76,8 +80,8 @@ Cloud.slideBanner = function ($this) {
     $this.mouseenter(pause).mouseleave(resume);
 
     return {
-        transit: transitTo,
-        autoStart: autoStart,
+	transit: transitTo,
+	autoStart: autoStart,
         stop: stop,
         pause: pause,
         resume: resume
