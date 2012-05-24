@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Example of the banner control</title>
+  <link type="text/css" href="css/smoothness/jquery-ui-1.8.20.custom.css" rel="stylesheet" />
+  <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+  <script type="text/javascript" src="js/jquery-ui-1.8.20.custom.min.js"></script>
+  <style>
+    .image-slider {
+	width:620px;
+	height: 238px;
+	position: relative;
+	overflow: hidden;
+    }
+
+    .image-slider ul{
+        list-style-type: none;
+        position: absolute;
+        margin: 0;
+        padding: 0;
+        font-size: 0;
+    }
+
+    ul.slide-triggers {
+	position: absolute;
+	bottom: 5px;
+	right: 5px;
+	font-size: 13px;
+    }
+
+    ul.slide-triggers>li {
+	float: right;
+	border-radius: 20px; 
+	-moz-border-radius: 20px;
+	-webkit-border-radius: 20px; 
+	width: 16px;
+	height: 16px;
+	text-align: center;
+	padding: 2px;
+	margin-right: 10px;
+	background-color: #FFF;
+	opacity: .7;
+	color: #DE7D4B;
+	cursor: pointer;
+    }
+
+    ul.slide-triggers>li.active {
+	background-color: #F60;
+	opacity: 1;
+	color: #FFF;
+    }
+
+  </style>
+  <script type="text/javascript">
+    $(function() {
+	var $pageBanner = $('#banner');
+	
+	function pageSlider($this) {
+	    var $imgList = $this.find('ul.img-list');
+	    var $li = $this.find('ul.img-list>li');
+	    var num = $li.length;
+	    var $triggers = $pageBanner.find('ul.slide-triggers');
+	    var height = $this.innerHeight();
+	    var speed = 500;
+	   	    
+	    function createTriggers() {
+		$li.each(function(index) {
+		    $trigger = $('<li>' + (index+1) + '</li>').data('index', index);
+		    $triggers.prepend($trigger);
+		    $trigger.hover(function() {
+			scrollTo($(this).data('index'));
+		    });
+		});
+
+		$triggers.find('li').last().addClass('active');
+	    };
+	    
+	    function scrollTo(index) {
+		if (index >= 0 && index < num) {
+		    $imgList.clearQueue().animate({top: -height*index}, speed);
+		    $triggers.find('li.active').removeClass('active');
+		    $triggers.find('li:eq(' + (num - index - 1) + ')').addClass('active');
+		};
+	    };
+
+	    function scrollToNext() {
+		var index = $triggers.find('li.active').data('index');
+		index = (index+1) % num;
+		scrollTo(index);
+	    };
+
+	    function autoStart(interval) {
+		setInterval(scrollToNext, interval);
+	    };
+
+	    createTriggers();
+	    autoStart(2000);
+
+	    return {
+		scroll: scrollTo
+	    };
+	};
+
+	window.pageSlider = pageSlider($pageBanner);
+    });
+  </script>
+</head>
+
+<body>
+  <div id='banner' class='image-slider'>
+    <ul class='img-list'>
+      <li>
+	<img src="http://img03.taobaocdn.com/tps/i3/T1DnjdXcpcXXcr_tT7-490-170.jpg" width="620" height="238" alt="Anniversary Sale">
+      </li>
+      <li>
+	<img src="http://img04.taobaocdn.com/tps/i4/T1LOneXX4fXXcr_tT7-490-170.jpg" width="620" height="238" alt="Robots">
+      </li>
+      <li>
+	<img border="0" src="http://i.mmcdn.cn/simba/img/T1RKCGXf0yXXb1upjX.jpg?noq=y" width="620px" height="238px">
+      </li>
+    </ul>
+    <ul class='slide-triggers'>
+      <!--<li class='active'>1</li>-->
+    </ul>
+  </div>
+</body>
+
+</html>
